@@ -3,23 +3,23 @@ import { getJobs } from "../api/nimbleApi";
 
 export function useJobs() {
   const [jobs, setJobs] = useState([]);
-  const [loadingJobs, setLoadingJobs] = useState(false);
-  const [errorJobs, setErrorJobs] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const fetchJobs = async () => {
-    setLoadingJobs(true);
-    setErrorJobs("");
+    setLoading(true);
+    setError("");
 
     try {
       const data = await getJobs();
       setJobs(Array.isArray(data) ? data : []);
     } catch (e) {
       setJobs([]);
-      setErrorJobs(e?.message || "Error al traer trabajos de la api");
+      setError(e?.message || "Error al traer trabajos de la api");
     } finally {
-      setLoadingJobs(false);
+      setLoading(false);
     }
   };
 
-  return { jobs, loadingJobs, errorJobs, fetchJobs };
+  return { jobs, loading, error, fetchJobs };
 }

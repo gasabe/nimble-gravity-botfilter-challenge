@@ -1,32 +1,51 @@
 import CandidateResult from "./components/CandidateResult";
 import CandidateSearch from "./components/candidateSearch";
-import { useCandidate } from "./hooks/useCanditate";
-import { useJobs } from "./hooks/useJobs";
 import JobList from "./components/jobList";
+import { useCandidate } from "./hooks/useCandidate";
+import { useJobs } from "./hooks/useJobs";
+import useApplyJob from "./hooks/useApplyJob";
 
 export default function App() {
-  const { candidate, loading, error, fetchCandidate } = useCandidate();
+  const {
+    candidate,
+    loading: candLoading,
+    error: candError,
+    fetchCandidate,
+  } = useCandidate();
   const { jobs, loading: jobsLoading, error: jobsError, fetchJobs } = useJobs();
+  const { submitApplication, getJobState } = useApplyJob();
+
+  const handleSubmitJob = (jobId, repoUrl) => {
+    if (!candidate) return;
+    submitApplication(jobId, {
+      uuid: candidate.uuid,
+      applicationId: candidate.applicationId,
+      candidateId: candidate.candidateId,
+      jobId,
+      repoUrl,
+    });
+  };
 
   return (
     <div className="app">
       <header className="header">
-        <h1>Bot Filter — Step 2</h1>
-        <p className="muted">Probar GET candidate/get-by-email</p>
+        <h1>Bot Filter — Challenge</h1>
+        <p className="muted">Step 2 → Step 3/4 → Step 5</p>
       </header>
-      <CandidateSearch onSearch={fetchCandidate} loading={loading} />
-      <CandidateResult candidate={candidate} error={error} />
-      <section className="card">
+      <CandidateSearch onSearch={fetchCandidate} loading={candLoading} />
+      <CandidateResult candidate={candidate} error={candError} />
 
-        <h2 className="card__title">Step 3 — Posiciones</h2>
-
-        <button className="btn" onClick={fetchJobs} disabled={jobsLoading}>
-          {jobsLoading ? "Cargando..." : "Cargar posiciones"}
-        </button>
-
-        <JobList jobs={jobs} loading={jobsLoading} error={jobsError} />
-      </section>
-      
+      {candidate && (
+        <JobList
+          jobs={jobs}
+          loading={jobsLoading}
+          error={jobsError}
+          candidate={candidate}
+          onLoadJobs={fetchJobs}
+          onSubmitJob={handleSubmitJob}
+          getJobState={getJobState}
+        />
+      )}
     </div>
   );
 }
