@@ -22,6 +22,37 @@ http://localhost:5173
 
 ---
 
-## Notas
+## Decisiones de arquitectura
+Separación en api/, hooks/ y components/
 
-- El proyecto fue creado con Vite por su configuración simple y rapida para proyectos React.
+Dividí el proyecto en estas tres carpetas para mantener responsabilidades claras:
+
+- api/ → se encarga únicamente de comunicarse con el servidor.
+
+- hooks/ → manejan el estado y la lógica (loading, error, data).
+
+- components/ → se enfocan solamente en la interfaz.
+
+## ¿Por qué existe client.js?
+
+En lugar de repetir fetch, el manejo de errores y el parseo de JSON en cada endpoint, creé un archivo central que se encarga de eso.
+
+Esto permite:
+
+- Evitar código repetido en el manejo de errores.
+
+- Mantener las funciones de nimbleApi.js más simples y claras.
+
+- Facilitar futuros cambios 
+
+## Hook por funcionalidad
+
+Cada flujo principal tiene su propio hook:
+
+- Buscar candidato
+
+- Cargar trabajo
+
+- Postularse (submit)
+
+Cada uno maneja su loading, error y data, manteniendo App.jsx más limpio y fácil de leer.
