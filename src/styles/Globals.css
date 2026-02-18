@@ -58,6 +58,13 @@ h1 { margin: 0 0 6px; font-size: 24px; }
 }
 .alert--error { border-color: rgba(255,90,90,.35); color: #ffd1d1; }
 
+.step-divider {
+  margin: 16px 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.step-divider__title { margin: 0 0 4px; font-size: 15px; }
+
 .pre {
   margin: 0;
   padding: 12px;
